@@ -56,20 +56,35 @@ for listing in listings:
     pay_label = Label(listing_frame, text = pay_text)
     pay_label.grid(column = 5, row = 1)
 
+    required_skills_frame = ttk.Frame(listing_frame)
+    required_skills_frame.grid(column = 0, row = 2)
+    required_skills_header_label = Label(required_skills_frame, text = "required skills:")
+    required_skills_header_label.grid(column = 0, row = 0, sticky = "W")
     required_skills_text = ", ".join(listing["required_skills"])
-    required_skills_label = Label(listing_frame, text = f'required skills: \n {required_skills_text}')
-    required_skills_label.grid(column = 0, row = 2)
+    required_skills_label = Label(required_skills_frame, text = required_skills_text)
+    required_skills_label.grid(column = 0, row = 1, sticky = "W")
 
+    nice_to_haves_frame = ttk.Frame(listing_frame)
+    nice_to_haves_frame.grid(column = 0, row = 3)
+    nice_to_haves_header_label = Label(nice_to_haves_frame, text = "nice to haves:")
+    nice_to_haves_header_label.grid(column = 0, row = 0, sticky = "W")
     nice_to_haves_text = ", ".join(listing["nice_to_haves"])
-    nice_to_haves_label = Label(listing_frame, text = f'nice to haves: \n {nice_to_haves_text}')
-    nice_to_haves_label.grid(column = 0, row = 3)
+    nice_to_haves_label = Label(nice_to_haves_frame, text = nice_to_haves_text)
+    nice_to_haves_label.grid(column = 0, row = 1, sticky = "W")
 
+    benefits_frame = ttk.Frame(listing_frame)
+    benefits_frame.grid(column = 0, row = 4)
+    benefits_header_label = Label(benefits_frame, text = "benefits:")
+    benefits_header_label.grid(column = 0, row = 0, sticky = "W")
     benefits_text = ", ".join(listing["benefits"])
-    benefits_label = Label(listing_frame, text = f'benefits: \n {benefits_text}')
-    benefits_label.grid(column = 0, row = 4)
+    benefits_label = Label(benefits_frame, text = benefits_text)
+    benefits_label.grid(column = 0, row = 1, sticky = "W")
 
     link_label = Label(listing_frame, text = link)
     link_label.grid(column = 0, row = 5)
+
+    for element in listing_frame.children.values():
+        element.grid(sticky = "W")
 
 # start the main loop
 root.mainloop()
