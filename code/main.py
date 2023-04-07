@@ -1,38 +1,30 @@
 from tkinter import *
 from tkinter import ttk
+import json
 
-def calculate(*args):
-    try:
-        value = float(feet.get())
-        meters.set(int(0.3048 * value * 10000.0 + 0.5)/10000.0)
-    except ValueError:
-        pass
-
+# create the main window
 root = Tk()
-root.title("Feet to Meters")
+root.title("Job Listing Manager")
 
-mainframe = ttk.Frame(root, padding="3 3 12 12")
-mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
+# create a frame to hold the listings
+mainframe = ttk.Frame(root, padding=10)
+mainframe.pack()
 
-feet = StringVar()
-feet_entry = ttk.Entry(mainframe, width=7, textvariable=feet)
-feet_entry.grid(column=2, row=1, sticky=(W, E))
+# load listings from file
+with open("code\listings.json", "r", encoding="utf-8") as file:
+    listings = json.loads(file.read())
 
-meters = StringVar()
-ttk.Label(mainframe, textvariable=meters).grid(column=2, row=2, sticky=(W, E))
+for listing in listings:
+    link = listing
+    listing = listings[listing]
 
-ttk.Button(mainframe, text="Calculate", command=calculate).grid(column=3, row=3, sticky=W)
+    main_box = ttk.Frame(mainframe, borderwidth=5, relief="groove")
+    main_box.pack(pady=5)
 
-ttk.Label(mainframe, text="feet").grid(column=3, row=1, sticky=W)
-ttk.Label(mainframe, text="is equivalent to").grid(column=1, row=2, sticky=E)
-ttk.Label(mainframe, text="meters").grid(column=3, row=2, sticky=W)
+    header_text = f'{listing["name"]} - {listing["employer"]} - {listing["location"]}'
+    header_label = Label(main_box, text=header_text, padx=5, pady=5)
+    header_label.pack(side="left")
 
-for child in mainframe.winfo_children(): 
-    child.grid_configure(padx=5, pady=5)
 
-feet_entry.focus()
-root.bind("<Return>", calculate)
-
+# start the main loop
 root.mainloop()
