@@ -9,7 +9,6 @@
             "b2b": true,
             "coc": false
         },
-        "full-time": true,
         "seniority": {
             "senior": false,
             "mid": true,
@@ -20,6 +19,7 @@
             "hybrid": true,
             "remote": false
         },
+        "full-time": true,
         "remote_recruitment": true,
         "pay": [7000, 16000],
         "pay_regularity": {

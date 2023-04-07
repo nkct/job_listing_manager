@@ -7,24 +7,49 @@ root = Tk()
 root.title("Job Listing Manager")
 
 # create a frame to hold the listings
-mainframe = ttk.Frame(root, padding=10)
+mainframe = ttk.Frame(root, padding = 10)
 mainframe.pack()
 
 # load listings from file
-with open("code\listings.json", "r", encoding="utf-8") as file:
+with open("code\listings.json", "r", encoding = "utf-8") as file:
     listings = json.loads(file.read())
 
 for listing in listings:
+    # listings are identified by the link
+    # but refering to the listing object is more convienient
     link = listing
     listing = listings[listing]
 
-    main_box = ttk.Frame(mainframe, borderwidth=5, relief="groove")
-    main_box.pack(pady=5)
+    listing_frame = ttk.Frame(mainframe, borderwidth = 5, relief = "groove")
+    listing_frame.pack()
 
     header_text = f'{listing["name"]} - {listing["employer"]} - {listing["location"]}'
-    header_label = Label(main_box, text=header_text, padx=5, pady=5)
-    header_label.pack(side="left")
+    header_label = Label(listing_frame, text = header_text, padx = 5, pady = 5)
+    header_label.grid(column = 0, row = 0, columnspan=4)
 
+    end_date_label = Label(listing_frame, text = listing["end_date"])
+    end_date_label.grid(column = 5, row = 0)
+
+    info_frame = ttk.Frame(listing_frame)
+    info_frame.grid(column = 0, row = 1)
+
+    contract_types = ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
+    contract_types_label = Label(info_frame, text = f'contract types: {contract_types}')
+    contract_types_label.grid(column = 0, row = 0)
+
+    seniorities = ", ".join([contract_type[0] for contract_type in listing["seniority"].items() if contract_type[1]])
+    seniorities_label = Label(info_frame, text = f'seniorities: {seniorities}')
+    seniorities_label.grid(column = 0, row = 1)
+
+    work_from_home_options = ", ".join([contract_type[0] for contract_type in listing["work_from_home"].items() if contract_type[1]])
+    work_from_home_options_label = Label(info_frame, text = f'work from home options: {work_from_home_options}')
+    work_from_home_options_label.grid(column = 1, row = 0)
+
+    full_time_label = Label(info_frame, text = f'full time: {listing["full-time"]}')
+    full_time_label.grid(column = 1, row = 1)
+
+    for element in info_frame.children.values():
+        element.grid(sticky = "W")
 
 # start the main loop
 root.mainloop()
