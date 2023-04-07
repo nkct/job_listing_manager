@@ -1,0 +1,34 @@
+{
+    "https://www.pracuj.pl/praca/junior-programista-c%23-developer-warszawa-cybernetyki-9,oferta,1002444152": {
+        "name": "Junior Programista C# Developer",
+        "employer": "HARDWARE DIRECT",
+        "location": "Cybernetyki 9, Mokotów, Warszawa",
+        "end_date": "20 kwi 2023",
+        "contract_type": {
+            "coe": true,
+            "b2b": true,
+            "coc": false
+        },
+        "full-time": true,
+        "seniority": {
+            "senior": false,
+            "mid": true,
+            "junior": true
+        },
+        "work_from_home": {
+            "on_site": true,
+            "hybrid": true,
+            "remote": false
+        },
+        "remote_recruitment": true,
+        "pay": [7000, 16000],
+        "pay_regularity": {
+            "yearly": false,
+            "monthly": true,
+            "hourly": false
+        },
+        "required_skills": [".NET", "C#", "DDD", "SQL", "ASP.NET", "ASP.NET MVC", "ASP.NET Core MVC", "JavaScript", "TypeScript"],
+        "nice_to_haves": [],
+        "benefits": ["prywatna opieka medyczna", "elastyczny czas pracy", "brak dress code’u", "kawa / herbata napoje", "parking dla pracowników"]
+    }
+}

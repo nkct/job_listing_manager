@@ -1,0 +1,27 @@
+link: str
+name: str
+employer: str
+location: str
+end_date: date
+contract_type:
+	contract_of_employment: bool
+	b2b: bool
+	contract_on_comisson: bool
+full-time: bool
+seniority:
+	senior: bool
+	mid / regular: bool
+	junior: bool
+work_from_home:
+	on_site: bool
+	hybrid: bool
+	remote: bool
+remote_recruitment: bool
+pay: list[int]
+pay_regularity:
+	yearly: bool
+	monthly: bool
+	hourly: bool
+required_skills: list[str]
+nice_to_haves: list[str]
+benefits: list[str]
