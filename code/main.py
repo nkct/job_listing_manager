@@ -56,5 +56,20 @@ for listing in listings:
     pay_label = Label(listing_frame, text = pay_text)
     pay_label.grid(column = 5, row = 1)
 
+    required_skills_text = ", ".join(listing["required_skills"])
+    required_skills_label = Label(listing_frame, text = f'required skills: \n {required_skills_text}')
+    required_skills_label.grid(column = 0, row = 2)
+
+    nice_to_haves_text = ", ".join(listing["nice_to_haves"])
+    nice_to_haves_label = Label(listing_frame, text = f'nice to haves: \n {nice_to_haves_text}')
+    nice_to_haves_label.grid(column = 0, row = 3)
+
+    benefits_text = ", ".join(listing["benefits"])
+    benefits_label = Label(listing_frame, text = f'benefits: \n {benefits_text}')
+    benefits_label.grid(column = 0, row = 4)
+
+    link_label = Label(listing_frame, text = link)
+    link_label.grid(column = 0, row = 5)
+
 # start the main loop
 root.mainloop()
