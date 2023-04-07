@@ -27,8 +27,8 @@ for listing in listings:
     header_label = Label(listing_frame, text = header_text, padx = 5, pady = 5)
     header_label.grid(column = 0, row = 0, columnspan=4)
 
-    end_date_label = Label(listing_frame, text = listing["end_date"])
-    end_date_label.grid(column = 5, row = 0)
+    end_date_label = Label(listing_frame, text = f'ends: {listing["end_date"]}')
+    end_date_label.grid(column = 5, row = 0, sticky = "E")
 
     info_frame = ttk.Frame(listing_frame)
     info_frame.grid(column = 0, row = 1)
@@ -50,6 +50,11 @@ for listing in listings:
 
     for element in info_frame.children.values():
         element.grid(sticky = "W")
+
+    pay_regularity = [regularity[0] for regularity in listing["pay_regularity"].items() if regularity[1]][0]
+    pay_text = f'{listing["pay"][0]} - {listing["pay"][1]} {pay_regularity}'
+    pay_label = Label(listing_frame, text = pay_text)
+    pay_label.grid(column = 5, row = 1)
 
 # start the main loop
 root.mainloop()
