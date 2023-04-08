@@ -62,7 +62,7 @@ def scrape(listing_url: str) -> dict:
         for required_skill in required_skills_list.contents:
             required_skills.append(required_skill.contents[0].text)
     except AttributeError:
-        required_skills = "N/A"
+        required_skills = ["N/A"]
 
     try:
         nice_to_haves = []
@@ -70,7 +70,7 @@ def scrape(listing_url: str) -> dict:
         for nice_to_have in nice_to_haves_list.contents:
             nice_to_haves.append(nice_to_have.contents[0].text)
     except AttributeError:
-        nice_to_haves = "N/A"
+        nice_to_haves = ["N/A"]
 
     try:
         benefits = []
@@ -78,7 +78,7 @@ def scrape(listing_url: str) -> dict:
         for benefit in benefits_list.contents:
             benefits.append(benefit.contents[0].contents[1].text)
     except AttributeError:
-        benefits = "N/A"
+        benefits = ["N/A"]
 
     return {
         "name": name,
@@ -117,6 +117,9 @@ def scrape_new_button_click():
             with open("code\listings.json", "w", encoding = "utf-8") as file:
                 file.write(json.dumps(listings, indent=4))
 
+        display_listings()
+        submit_url_window.destroy()
+
 
     submit_button = Button(submit_url_window, text="Submit", command = submit_button_click)
     submit_button.pack(pady=5)
@@ -124,81 +127,89 @@ def scrape_new_button_click():
 scrape_new_button = ttk.Button(mainframe, text="Scrape new", command = scrape_new_button_click)
 scrape_new_button.pack()
 
-# load listings from file
-with open("code\listings.json", "r", encoding = "utf-8") as file:
-    listings = json.loads(file.read())
+listings_frame = ttk.Frame(mainframe)
+listings_frame.pack()
 
-for listing in listings:
-    # listings are identified by the link
-    # but refering to the listing object is more convienient
-    link = listing
-    listing = listings[listing]
+def display_listings():
+    # load listings from file
+    with open("code\listings.json", "r", encoding = "utf-8") as file:
+        listings = json.loads(file.read())
 
-    listing_frame = ttk.Frame(mainframe, borderwidth = 5, relief = "groove")
-    listing_frame.pack()
+    for child in listings_frame.winfo_children():
+        child.destroy()
 
-    header_text = f'{listing["name"]} - {listing["employer"]} - {listing["location"]}'
-    header_label = Label(listing_frame, text = header_text, padx = 5, pady = 5)
-    header_label.grid(column = 0, row = 0, columnspan=4)
+    for listing in listings:
+        # listings are identified by the link
+        # but refering to the listing object is more convienient
+        link = listing
+        listing = listings[listing]
 
-    end_date_label = Label(listing_frame, text = f'ends: {listing["end_date"]}')
-    end_date_label.grid(column = 5, row = 0, sticky = "E")
+        listing_frame = ttk.Frame(listings_frame, borderwidth = 5, relief = "groove")
+        listing_frame.pack()
 
-    info_frame = ttk.Frame(listing_frame)
-    info_frame.grid(column = 0, row = 1)
+        header_text = f'{listing["name"]} - {listing["employer"]} - {listing["location"]}'
+        header_label = Label(listing_frame, text = header_text, padx = 5, pady = 5)
+        header_label.grid(column = 0, row = 0, columnspan=4)
 
-    contract_types = ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
-    contract_types_label = Label(info_frame, text = f'contract types: {contract_types}')
-    contract_types_label.grid(column = 0, row = 0)
+        end_date_label = Label(listing_frame, text = f'ends: {listing["end_date"]}')
+        end_date_label.grid(column = 5, row = 0, sticky = "E")
 
-    seniorities = ", ".join([contract_type[0] for contract_type in listing["seniority"].items() if contract_type[1]])
-    seniorities_label = Label(info_frame, text = f'seniorities: {seniorities}')
-    seniorities_label.grid(column = 0, row = 1)
+        info_frame = ttk.Frame(listing_frame)
+        info_frame.grid(column = 0, row = 1)
 
-    work_from_home_options = ", ".join([contract_type[0] for contract_type in listing["work_from_home"].items() if contract_type[1]])
-    work_from_home_options_label = Label(info_frame, text = f'work from home options: {work_from_home_options}')
-    work_from_home_options_label.grid(column = 1, row = 0)
+        contract_types = ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
+        contract_types_label = Label(info_frame, text = f'contract types: {contract_types}')
+        contract_types_label.grid(column = 0, row = 0)
 
-    full_time_label = Label(info_frame, text = f'full time: {listing["full-time"]}')
-    full_time_label.grid(column = 1, row = 1)
+        seniorities = ", ".join([contract_type[0] for contract_type in listing["seniority"].items() if contract_type[1]])
+        seniorities_label = Label(info_frame, text = f'seniorities: {seniorities}')
+        seniorities_label.grid(column = 0, row = 1)
 
-    for element in info_frame.children.values():
-        element.grid(sticky = "W")
+        work_from_home_options = ", ".join([contract_type[0] for contract_type in listing["work_from_home"].items() if contract_type[1]])
+        work_from_home_options_label = Label(info_frame, text = f'work from home options: {work_from_home_options}')
+        work_from_home_options_label.grid(column = 1, row = 0)
 
-    pay_regularity = [regularity[0] for regularity in listing["pay_regularity"].items() if regularity[1]][0]
-    pay_text = f'{listing["pay"][0]} - {listing["pay"][1]} {pay_regularity}'
-    pay_label = Label(listing_frame, text = pay_text)
-    pay_label.grid(column = 5, row = 1)
+        full_time_label = Label(info_frame, text = f'full time: {listing["full-time"]}')
+        full_time_label.grid(column = 1, row = 1)
 
-    required_skills_frame = ttk.Frame(listing_frame)
-    required_skills_frame.grid(column = 0, row = 2)
-    required_skills_header_label = Label(required_skills_frame, text = "required skills:")
-    required_skills_header_label.grid(column = 0, row = 0, sticky = "W")
-    required_skills_text = ", ".join(listing["required_skills"])
-    required_skills_label = Label(required_skills_frame, text = required_skills_text)
-    required_skills_label.grid(column = 0, row = 1, sticky = "W")
+        for element in info_frame.children.values():
+            element.grid(sticky = "W")
 
-    nice_to_haves_frame = ttk.Frame(listing_frame)
-    nice_to_haves_frame.grid(column = 0, row = 3)
-    nice_to_haves_header_label = Label(nice_to_haves_frame, text = "nice to haves:")
-    nice_to_haves_header_label.grid(column = 0, row = 0, sticky = "W")
-    nice_to_haves_text = ", ".join(listing["nice_to_haves"])
-    nice_to_haves_label = Label(nice_to_haves_frame, text = nice_to_haves_text)
-    nice_to_haves_label.grid(column = 0, row = 1, sticky = "W")
+        pay_regularity = [regularity[0] for regularity in listing["pay_regularity"].items() if regularity[1]][0]
+        pay_text = f'{listing["pay"][0]} - {listing["pay"][1]} {pay_regularity}'
+        pay_label = Label(listing_frame, text = pay_text)
+        pay_label.grid(column = 5, row = 1)
 
-    benefits_frame = ttk.Frame(listing_frame)
-    benefits_frame.grid(column = 0, row = 4)
-    benefits_header_label = Label(benefits_frame, text = "benefits:")
-    benefits_header_label.grid(column = 0, row = 0, sticky = "W")
-    benefits_text = ", ".join(listing["benefits"])
-    benefits_label = Label(benefits_frame, text = benefits_text)
-    benefits_label.grid(column = 0, row = 1, sticky = "W")
+        required_skills_frame = ttk.Frame(listing_frame)
+        required_skills_frame.grid(column = 0, row = 2)
+        required_skills_header_label = Label(required_skills_frame, text = "required skills:")
+        required_skills_header_label.grid(column = 0, row = 0, sticky = "W")
+        required_skills_text = ", ".join(listing["required_skills"])
+        required_skills_label = Label(required_skills_frame, text = required_skills_text)
+        required_skills_label.grid(column = 0, row = 1, sticky = "W")
 
-    link_label = Label(listing_frame, text = link)
-    link_label.grid(column = 0, row = 5)
+        nice_to_haves_frame = ttk.Frame(listing_frame)
+        nice_to_haves_frame.grid(column = 0, row = 3)
+        nice_to_haves_header_label = Label(nice_to_haves_frame, text = "nice to haves:")
+        nice_to_haves_header_label.grid(column = 0, row = 0, sticky = "W")
+        nice_to_haves_text = ", ".join(listing["nice_to_haves"])
+        nice_to_haves_label = Label(nice_to_haves_frame, text = nice_to_haves_text)
+        nice_to_haves_label.grid(column = 0, row = 1, sticky = "W")
 
-    for element in listing_frame.children.values():
-        element.grid(sticky = "W")
+        benefits_frame = ttk.Frame(listing_frame)
+        benefits_frame.grid(column = 0, row = 4)
+        benefits_header_label = Label(benefits_frame, text = "benefits:")
+        benefits_header_label.grid(column = 0, row = 0, sticky = "W")
+        benefits_text = ", ".join(listing["benefits"])
+        benefits_label = Label(benefits_frame, text = benefits_text)
+        benefits_label.grid(column = 0, row = 1, sticky = "W")
+
+        link_label = Label(listing_frame, text = link)
+        link_label.grid(column = 0, row = 5)
+
+        for element in listing_frame.children.values():
+            element.grid(sticky = "W")
+display_listings()
 
 # start the main loop
 root.mainloop()

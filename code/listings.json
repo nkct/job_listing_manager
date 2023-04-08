@@ -41,7 +41,9 @@
             "JavaScript",
             "TypeScript"
         ],
-        "nice_to_haves": "N/A",
+        "nice_to_haves": [
+            "N/A"
+        ],
         "benefits": [
             "prywatna opieka medyczna",
             "elastyczny czas pracy",
