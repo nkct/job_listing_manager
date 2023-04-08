@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import ttk
 import json
+import requests
+from bs4 import BeautifulSoup
 
 # create the main window
 root = Tk()
@@ -88,3 +90,94 @@ for listing in listings:
 
 # start the main loop
 root.mainloop()
+
+def scrape(listing_url: str) -> dict:
+    page = requests.get(listing_url)
+
+    soup = BeautifulSoup(page.content, "html.parser")
+
+    name = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h1").text
+    employer = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").text
+    location = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(1) > div > div > a").text
+    end_date = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(2) > div > div > div.offer-viewDZ0got").text.split(": ")[1]
+    
+    contract_types = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(3) > div > div > div").text
+    contract_type = {
+        "coe": "umowa o pracę" in contract_types.lower(),
+        "b2b": "b2b" in contract_types.lower(),
+        "coc": "zlecenie" in contract_types.lower(),
+    }
+
+    seniorities = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(5) > div > div > div").text
+    seniority = {
+        "senior": "senior" in seniorities.lower(),
+        "mid": "mid" in seniorities.lower(),
+        "junior": "junior" in seniorities.lower(),
+    }
+
+    work_from_home_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(6) > div > div > div").text
+    work_from_home = {
+        "on_site": "stacjonarna" in work_from_home_options.lower(),
+        "hybrid": "hybrydowa" in work_from_home_options.lower(),
+        "remote": "zdalna" in work_from_home_options.lower(),
+    }
+
+    full_time = "pełny etat" in soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text.lower()
+    remote_recruitment = "rekrutacja zdalna" in soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(9) > div > div > div").text.lower()
+
+    pay_info = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > strong").find_all("span", recursive = False)
+    pay = [filter(str.isdigit, pay_info[0].text), filter(str.isdigit, pay_info[1].text)]
+    pay = [int("".join(pay)) for pay in pay]
+    pay_regularity_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > span").text
+    pay_regularity = {
+        "yearly": "rocznie" in pay_regularity_options.lower(),
+        "monthly": "mies" in pay_regularity_options.lower(),
+        "hourly": "godz" in pay_regularity_options.lower(),
+    }
+
+    try:
+        required_skills = []
+        required_skills_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(2) > ul")
+        for required_skill in required_skills_list.findChildren():
+            required_skills.append(required_skill.find("p").text)
+    except AttributeError:
+        required_skills = "N/A"
+
+    try:
+        nice_to_haves = []
+        nice_to_haves_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(3) > ul")
+        for nice_to_have in nice_to_haves_list.findChildren():
+            nice_to_haves.append(nice_to_have.find("p").text)
+    except AttributeError:
+        nice_to_haves = "N/A"
+
+    try:
+        benefits = []
+        benefits_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > section.offer-viewJsKTWk > ul")
+        for benefits in benefits_list.findChildren():
+            benefits.append(benefits.find("article").find("p").text)
+    except AttributeError:
+        benefits = "N/A"
+
+    return {
+        "name": name,
+        "employer": employer,
+        "location": location,
+        "end_date": end_date,
+        "contract_type": contract_type,
+        "seniority": seniority,
+        "work_from_home": work_from_home,
+        "full-time": full_time,
+        "remote_recruitment": remote_recruitment,
+        "pay": pay,
+        "pay_regularity": pay_regularity,
+        "required_skills": required_skills,
+        "nice_to_haves": nice_to_haves,
+        "benefits": benefits,
+    }
+
+test_url = "https://www.pracuj.pl/praca/junior-programista-c%23-developer-warszawa-cybernetyki-9,oferta,1002444152"
+test_listing = scrape(test_url)
+with open("./code/actual_listings.json", "w") as file:
+    test_listings = {test_url: test_listing}
+    file.write(json.dumps(test_listings, indent=4))
