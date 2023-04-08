@@ -97,7 +97,7 @@ def scrape(listing_url: str) -> dict:
     soup = BeautifulSoup(page.content, "html.parser")
 
     name = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h1").text
-    employer = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").text
+    employer = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").contents[0]
     location = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(1) > div > div > a").text
     end_date = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(2) > div > div > div.offer-viewDZ0got").text.split(": ")[1]
     
@@ -138,24 +138,24 @@ def scrape(listing_url: str) -> dict:
     try:
         required_skills = []
         required_skills_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(2) > ul")
-        for required_skill in required_skills_list.findChildren():
-            required_skills.append(required_skill.find("p").text)
+        for required_skill in required_skills_list.contents:
+            required_skills.append(required_skill.contents[0].text)
     except AttributeError:
         required_skills = "N/A"
 
     try:
         nice_to_haves = []
         nice_to_haves_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(3) > ul")
-        for nice_to_have in nice_to_haves_list.findChildren():
-            nice_to_haves.append(nice_to_have.find("p").text)
+        for nice_to_have in nice_to_haves_list.contents:
+            nice_to_haves.append(nice_to_have.contents[0].text)
     except AttributeError:
         nice_to_haves = "N/A"
 
     try:
         benefits = []
         benefits_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > section.offer-viewJsKTWk > ul")
-        for benefits in benefits_list.findChildren():
-            benefits.append(benefits.find("article").find("p").text)
+        for benefit in benefits_list.contents:
+            benefits.append(benefit.contents[0].contents[1].text)
     except AttributeError:
         benefits = "N/A"
 
