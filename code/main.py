@@ -17,45 +17,77 @@ def scrape(listing_url: str) -> dict:
 
     soup = BeautifulSoup(page.content, "html.parser")
 
-    name = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h1").text
-    employer = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").contents[0]
-    location = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(1) > div > div > a").text
-    end_date = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(2) > div > div > div.offer-viewDZ0got").text.split(": ")[1]
+    try:
+        name = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h1").text
+    except AttributeError:
+        name = "N/A"
+    try:
+        employer = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").contents[0]
+    except AttributeError:
+        employer = "N/A"
+    try:
+        location = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(1) > div > div > a").text
+    except AttributeError:
+        location = "N/A"
+    try:
+        end_date = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(2) > div > div > div.offer-viewDZ0got").text.split(": ")[1]
+    except AttributeError:
+        end_date = "N/A"
     
-    contract_types = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(3) > div > div > div").text
-    contract_type = {
-        "coe": "umowa o pracę" in contract_types.lower(),
-        "b2b": "b2b" in contract_types.lower(),
-        "coc": "zlecenie" in contract_types.lower(),
-    }
-
-    seniorities = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(5) > div > div > div").text
-    seniority = {
-        "senior": "senior" in seniorities.lower(),
-        "mid": "mid" in seniorities.lower(),
-        "junior": "junior" in seniorities.lower(),
-    }
-
-    work_from_home_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(6) > div > div > div").text
-    work_from_home = {
-        "on_site": "stacjonarna" in work_from_home_options.lower(),
-        "hybrid": "hybrydowa" in work_from_home_options.lower(),
-        "remote": "zdalna" in work_from_home_options.lower(),
-    }
-
-    full_time = "pełny etat" in soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text.lower()
-    remote_recruitment = "rekrutacja zdalna" in soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(9) > div > div > div").text.lower()
+    try:
+        contract_types = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(3) > div > div > div").text
+        contract_type = {
+            "coe": "umowa o pracę" in contract_types.lower(),
+            "b2b": "b2b" in contract_types.lower(),
+            "coc": "zlecenie" in contract_types.lower(),
+        }
+    except AttributeError:
+        contract_type = "N/A"
+    
+    try:
+        seniorities = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(5) > div > div > div").text
+        seniority = {
+            "senior": "senior" in seniorities.lower(),
+            "mid": "mid" in seniorities.lower(),
+            "junior": "junior" in seniorities.lower(),
+        }
+    except AttributeError:
+        seniority = "N/A"
+    
+    try:
+        work_from_home_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(6) > div > div > div").text
+        work_from_home = {
+            "on_site": "stacjonarna" in work_from_home_options.lower(),
+            "hybrid": "hybrydowa" in work_from_home_options.lower(),
+            "remote": "zdalna" in work_from_home_options.lower(),
+        }
+    except AttributeError:
+        work_from_home = "N/A"
+    
+    try:
+        full_time_text = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text
+        full_time = "pełny etat" in full_time_text.lower()
+    except AttributeError:
+        full_time = "N/A"
+    
+    try:
+        remote_recruitment_text = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(9) > div > div > div").text
+        remote_recruitment = "rekrutacja zdalna" in remote_recruitment_text.lower()
+    except AttributeError:
+        remote_recruitment = "N/A"
 
     pay_info = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > strong").find_all("span", recursive = False)
     pay = [filter(str.isdigit, pay_info[0].text), filter(str.isdigit, pay_info[1].text)]
     pay = [int("".join(pay)) for pay in pay]
-    pay_regularity_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > span").text
+    try:
+        pay_regularity_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > span").text
+    except AttributeError:
+        pay_regularity_options = "N/A"
     pay_regularity = {
-        "yearly": "rocznie" in pay_regularity_options.lower(),
-        "monthly": "mies" in pay_regularity_options.lower(),
-        "hourly": "godz" in pay_regularity_options.lower(),
-    }
-
+                "yearly": "rocznie" in pay_regularity_options.lower(),
+                "monthly": "mies" in pay_regularity_options.lower(),
+                "hourly": "godz" in pay_regularity_options.lower(),
+            }
     try:
         required_skills = []
         required_skills_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(2) > ul")
@@ -66,7 +98,7 @@ def scrape(listing_url: str) -> dict:
 
     try:
         nice_to_haves = []
-        nice_to_haves_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(3) > ul")
+        nice_to_haves_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(4) > ul")
         for nice_to_have in nice_to_haves_list.contents:
             nice_to_haves.append(nice_to_have.contents[0].text)
     except AttributeError:
@@ -100,12 +132,13 @@ def scrape(listing_url: str) -> dict:
 def scrape_new_button_click():
     # create a new window
     submit_url_window = Toplevel(root)
+    submit_url_window.geometry("500x100")
     submit_url_window.title("Submit url for scraping")
 
     # create the text input box and submit button
     input_label = Label(submit_url_window, text="Enter url:")
     input_label.pack(pady = 10)
-    input_box = Entry(submit_url_window)
+    input_box = Entry(submit_url_window, width = 70)
     input_box.pack(pady=5)
 
     def submit_button_click():

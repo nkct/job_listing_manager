@@ -52,5 +52,57 @@
             "napoje",
             "parking dla pracownik\u00f3w"
         ]
+    },
+    "https://www.pracuj.pl/praca/test-automation-engineer-warszawa,oferta,1002513216": {
+        "name": "Test Automation Engineer",
+        "employer": "E NET PRODUCTION",
+        "location": "N/A",
+        "end_date": "05 maj 2023",
+        "contract_type": {
+            "coe": true,
+            "b2b": true,
+            "coc": false
+        },
+        "seniority": {
+            "senior": true,
+            "mid": true,
+            "junior": false
+        },
+        "work_from_home": {
+            "on_site": false,
+            "hybrid": false,
+            "remote": true
+        },
+        "full-time": true,
+        "remote_recruitment": "N/A",
+        "pay": [
+            14000,
+            18000
+        ],
+        "pay_regularity": {
+            "yearly": false,
+            "monthly": true,
+            "hourly": false
+        },
+        "required_skills": [
+            "JavaScript",
+            "TypeScript",
+            "Cypress",
+            "Git",
+            "DevTools",
+            "API REST"
+        ],
+        "nice_to_haves": [
+            "N/A"
+        ],
+        "benefits": [
+            "dofinansowanie zaj\u0119\u0107 sportowych",
+            "prywatna opieka medyczna",
+            "dofinansowanie szkole\u0144 i kurs\u00f3w",
+            "ubezpieczenie na \u017cycie",
+            "brak dress code\u2019u",
+            "program rekomendacji pracownik\u00f3w",
+            "inicjatywy dobroczynne"
+        ]
     }
 }
