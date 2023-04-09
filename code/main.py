@@ -254,6 +254,18 @@ def display_listings():
         delete_listing_button = ttk.Button(listing_frame, text="Delete", command = delete_listing_button_click)
         delete_listing_button.grid(column = 0, row = 6)
 
+        def update_listing_button_click():
+            listing = scrape(link)
+            with open("code\listings.json", "r", encoding = "utf-8") as file:
+                listings = json.loads(file.read())
+                listings[link] = listing
+                with open("code\listings.json", "w", encoding = "utf-8") as file:
+                    file.write(json.dumps(listings, indent=4))
+            display_listings()
+
+        update_listing_button = ttk.Button(listing_frame, text="Update", command = update_listing_button_click)
+        update_listing_button.grid(column = 1, row = 6)
+
 display_listings()
 
 # start the main loop
