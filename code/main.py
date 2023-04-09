@@ -242,6 +242,18 @@ def display_listings():
 
         for element in listing_frame.children.values():
             element.grid(sticky = "W")
+
+        def delete_listing_button_click():
+            with open("code\listings.json", "r", encoding = "utf-8") as file:
+                listings = json.loads(file.read())
+                listings.pop(link)
+                with open("code\listings.json", "w", encoding = "utf-8") as file:
+                    file.write(json.dumps(listings, indent=4))
+            display_listings()
+
+        delete_listing_button = ttk.Button(listing_frame, text="Delete", command = delete_listing_button_click)
+        delete_listing_button.grid(column = 0, row = 6)
+
 display_listings()
 
 # start the main loop
