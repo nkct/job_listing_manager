@@ -3,6 +3,7 @@ from tkinter import ttk
 import json
 import requests
 from bs4 import BeautifulSoup
+import webbrowser
 
 # create the main window
 root = Tk()
@@ -237,8 +238,9 @@ def display_listings():
         benefits_label = Label(benefits_frame, text = benefits_text)
         benefits_label.grid(column = 0, row = 1, sticky = "W")
 
-        link_label = Label(listing_frame, text = link)
+        link_label = Label(listing_frame, text = link, fg = "#0000EE")
         link_label.grid(column = 0, row = 5)
+        link_label.bind("<Button-1>", lambda e: webbrowser.open_new(link))
 
         for element in listing_frame.children.values():
             element.grid(sticky = "W")
