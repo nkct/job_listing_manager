@@ -65,6 +65,7 @@ def scrape(listing_url: str) -> dict:
     except AttributeError:
         work_from_home = "N/A"
     
+    # change to etat: pelny/częściowy
     try:
         full_time_text = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text
         full_time = "pełny etat" in full_time_text.lower()
@@ -77,25 +78,30 @@ def scrape(listing_url: str) -> dict:
     except AttributeError:
         remote_recruitment = "N/A"
 
-    pay_info = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > strong").find_all("span", recursive = False)
-    pay = [filter(str.isdigit, pay_info[0].text), filter(str.isdigit, pay_info[1].text)]
-    pay = [int("".join(pay)) for pay in pay]
+    try:
+        pay_info = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > strong").find_all("span", recursive = False)
+        pay = [filter(str.isdigit, pay_info[0].text), filter(str.isdigit, pay_info[1].text)]
+        pay = [int("".join(pay)) for pay in pay]
+    except AttributeError:
+        pay = "N/A"
+
     try:
         pay_regularity_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > span").text
+        pay_regularity = {
+            "yearly": "rocznie" in pay_regularity_options.lower(),
+            "monthly": "mies" in pay_regularity_options.lower(),
+            "hourly": "godz" in pay_regularity_options.lower(),
+        }
     except AttributeError:
-        pay_regularity_options = "N/A"
-    pay_regularity = {
-                "yearly": "rocznie" in pay_regularity_options.lower(),
-                "monthly": "mies" in pay_regularity_options.lower(),
-                "hourly": "godz" in pay_regularity_options.lower(),
-            }
+        pay_regularity = "N/A"
+        
     try:
         required_skills = []
         required_skills_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(2) > ul")
         for required_skill in required_skills_list.contents:
             required_skills.append(required_skill.contents[0].text)
     except AttributeError:
-        required_skills = ["N/A"]
+        required_skills = "N/A"
 
     try:
         nice_to_haves = []
@@ -103,7 +109,7 @@ def scrape(listing_url: str) -> dict:
         for nice_to_have in nice_to_haves_list.contents:
             nice_to_haves.append(nice_to_have.contents[0].text)
     except AttributeError:
-        nice_to_haves = ["N/A"]
+        nice_to_haves = "N/A"
 
     try:
         benefits = []
@@ -111,7 +117,7 @@ def scrape(listing_url: str) -> dict:
         for benefit in benefits_list.contents:
             benefits.append(benefit.contents[0].contents[1].text)
     except AttributeError:
-        benefits = ["N/A"]
+        benefits = "N/A"
 
     return {
         "name": name,
@@ -191,15 +197,15 @@ def display_listings():
         info_frame = ttk.Frame(listing_frame)
         info_frame.grid(column = 0, row = 1)
 
-        contract_types = "N/A" if not any(contract_type[1] for contract_type in listing["contract_type"].items()) else ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
+        contract_types = "N/A" if listing["contract_type"] == "N/A" or not any(contract_type[1] for contract_type in listing["contract_type"].items()) else ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
         contract_types_label = Label(info_frame, text = f'contract types: {contract_types}')
         contract_types_label.grid(column = 0, row = 0)
 
-        seniorities = "N/A" if not any(seniority[1] for seniority in listing["seniority"].items()) else ", ".join([seniority[0] for seniority in listing["seniority"].items() if seniority[1]])
+        seniorities = "N/A" if listing["seniority"] == "N/A" or not any(seniority[1] for seniority in listing["seniority"].items()) else ", ".join([seniority[0] for seniority in listing["seniority"].items() if seniority[1]])
         seniorities_label = Label(info_frame, text = f'seniorities: {seniorities}')
         seniorities_label.grid(column = 0, row = 1)
 
-        work_from_home_options = "N/A" if not any(work_from_home_option[1] for work_from_home_option in listing["work_from_home"].items()) else ", ".join([work_from_home_option[0] for work_from_home_option in listing["work_from_home"].items() if work_from_home_option[1]])
+        work_from_home_options = "N/A" if listing["work_from_home"] == "N/A" or not any(work_from_home_option[1] for work_from_home_option in listing["work_from_home"].items()) else ", ".join([work_from_home_option[0] for work_from_home_option in listing["work_from_home"].items() if work_from_home_option[1]])
         work_from_home_options_label = Label(info_frame, text = f'work from home options: {work_from_home_options}')
         work_from_home_options_label.grid(column = 1, row = 0)
 
@@ -209,8 +215,8 @@ def display_listings():
         for element in info_frame.children.values():
             element.grid(sticky = "W")
 
-        pay_regularity = [regularity[0] for regularity in listing["pay_regularity"].items() if regularity[1]][0]
-        pay_text = f'{listing["pay"][0]} - {listing["pay"][1]} {pay_regularity}'
+        pay_regularity = "" if listing["pay_regularity"] == "N/A" else [regularity[0] for regularity in listing["pay_regularity"].items() if regularity[1]][0]
+        pay_text = "N/A" if listing["pay"] == "N/A" else f'{listing["pay"][0]} - {listing["pay"][1]} {pay_regularity}'
         pay_label = Label(listing_frame, text = pay_text)
         pay_label.grid(column = 5, row = 1)
 
@@ -218,7 +224,7 @@ def display_listings():
         required_skills_frame.grid(column = 0, row = 2)
         required_skills_header_label = Label(required_skills_frame, text = "required skills:")
         required_skills_header_label.grid(column = 0, row = 0, sticky = "W")
-        required_skills_text = ", ".join(listing["required_skills"])
+        required_skills_text = "N/A" if listing["required_skills"] == "N/A" else ", ".join(listing["required_skills"])
         required_skills_label = Label(required_skills_frame, text = required_skills_text)
         required_skills_label.grid(column = 0, row = 1, sticky = "W")
 
@@ -226,7 +232,7 @@ def display_listings():
         nice_to_haves_frame.grid(column = 0, row = 3)
         nice_to_haves_header_label = Label(nice_to_haves_frame, text = "nice to haves:")
         nice_to_haves_header_label.grid(column = 0, row = 0, sticky = "W")
-        nice_to_haves_text = ", ".join(listing["nice_to_haves"])
+        nice_to_haves_text = "N/A" if listing["nice_to_haves"] == "N/A" else ", ".join(listing["nice_to_haves"])
         nice_to_haves_label = Label(nice_to_haves_frame, text = nice_to_haves_text)
         nice_to_haves_label.grid(column = 0, row = 1, sticky = "W")
 
@@ -234,7 +240,7 @@ def display_listings():
         benefits_frame.grid(column = 0, row = 4)
         benefits_header_label = Label(benefits_frame, text = "benefits:")
         benefits_header_label.grid(column = 0, row = 0, sticky = "W")
-        benefits_text = ", ".join(listing["benefits"])
+        benefits_text = "N/A" if listing["benefits"] == "N/A" else ", ".join(listing["benefits"])
         benefits_label = Label(benefits_frame, text = benefits_text)
         benefits_label.grid(column = 0, row = 1, sticky = "W")
 

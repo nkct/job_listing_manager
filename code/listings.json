@@ -1,83 +1,29 @@
 {
-    "https://www.pracuj.pl/praca/junior-programista-c%23-developer-warszawa-cybernetyki-9,oferta,1002444152": {
-        "name": "Junior Programista C# Developer",
-        "employer": "HARDWARE DIRECT",
-        "location": "Cybernetyki 9, Mokot\u00f3w, Warszawa",
-        "end_date": "20 kwi 2023",
+    "https://www.pracuj.pl/praca/software-net-developer-wroclaw-robotnicza-42a,oferta,1002494169": {
+        "name": "Software .NET Developer",
+        "employer": "Tap.Talent",
+        "location": "Robotnicza 42A, Stare Miasto, Wroc\u0142aw",
+        "end_date": "N/A",
         "contract_type": {
-            "coe": true,
-            "b2b": true,
+            "coe": false,
+            "b2b": false,
             "coc": false
         },
         "seniority": {
             "senior": false,
-            "mid": true,
-            "junior": true
-        },
-        "work_from_home": {
-            "on_site": true,
-            "hybrid": true,
-            "remote": false
-        },
-        "full-time": true,
-        "remote_recruitment": true,
-        "pay": [
-            7000,
-            16000
-        ],
-        "pay_regularity": {
-            "yearly": false,
-            "monthly": true,
-            "hourly": false
-        },
-        "required_skills": [
-            ".NET",
-            "C#",
-            "DDD",
-            "SQL",
-            "ASP.NET",
-            "ASP.NET MVC",
-            "ASP.NET Core MVC",
-            "JavaScript",
-            "TypeScript"
-        ],
-        "nice_to_haves": [
-            "N/A"
-        ],
-        "benefits": [
-            "prywatna opieka medyczna",
-            "elastyczny czas pracy",
-            "brak dress code\u2019u",
-            "kawa / herbata",
-            "napoje",
-            "parking dla pracownik\u00f3w"
-        ]
-    },
-    "https://www.pracuj.pl/praca/test-automation-engineer-warszawa,oferta,1002513216": {
-        "name": "Test Automation Engineer",
-        "employer": "E NET PRODUCTION",
-        "location": "N/A",
-        "end_date": "05 maj 2023",
-        "contract_type": {
-            "coe": true,
-            "b2b": true,
-            "coc": false
-        },
-        "seniority": {
-            "senior": true,
-            "mid": true,
+            "mid": false,
             "junior": false
         },
         "work_from_home": {
             "on_site": false,
             "hybrid": false,
-            "remote": true
+            "remote": false
         },
-        "full-time": true,
-        "remote_recruitment": "N/A",
+        "full-time": false,
+        "remote_recruitment": true,
         "pay": [
-            14000,
-            18000
+            18000,
+            22000
         ],
         "pay_regularity": {
             "yearly": false,
@@ -85,24 +31,15 @@
             "hourly": false
         },
         "required_skills": [
-            "JavaScript",
-            "TypeScript",
-            "Cypress",
-            "Git",
-            "DevTools",
-            "API REST"
+            "CSS",
+            "jQuery",
+            "ASP.NET",
+            ".NET"
         ],
-        "nice_to_haves": [
-            "N/A"
-        ],
+        "nice_to_haves": "N/A",
         "benefits": [
-            "dofinansowanie zaj\u0119\u0107 sportowych",
-            "prywatna opieka medyczna",
-            "dofinansowanie szkole\u0144 i kurs\u00f3w",
-            "ubezpieczenie na \u017cycie",
-            "brak dress code\u2019u",
-            "program rekomendacji pracownik\u00f3w",
-            "inicjatywy dobroczynne"
+            "dofinansowanie nauki j\u0119zyk\u00f3w",
+            "dofinansowanie szkole\u0144 i kurs\u00f3w"
         ]
     }
 }
