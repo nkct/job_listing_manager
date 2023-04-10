@@ -191,15 +191,15 @@ def display_listings():
         info_frame = ttk.Frame(listing_frame)
         info_frame.grid(column = 0, row = 1)
 
-        contract_types = ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
+        contract_types = "N/A" if not any(contract_type[1] for contract_type in listing["contract_type"].items()) else ", ".join([contract_type[0] for contract_type in listing["contract_type"].items() if contract_type[1]])
         contract_types_label = Label(info_frame, text = f'contract types: {contract_types}')
         contract_types_label.grid(column = 0, row = 0)
 
-        seniorities = ", ".join([contract_type[0] for contract_type in listing["seniority"].items() if contract_type[1]])
+        seniorities = "N/A" if not any(seniority[1] for seniority in listing["seniority"].items()) else ", ".join([seniority[0] for seniority in listing["seniority"].items() if seniority[1]])
         seniorities_label = Label(info_frame, text = f'seniorities: {seniorities}')
         seniorities_label.grid(column = 0, row = 1)
 
-        work_from_home_options = ", ".join([contract_type[0] for contract_type in listing["work_from_home"].items() if contract_type[1]])
+        work_from_home_options = "N/A" if not any(work_from_home_option[1] for work_from_home_option in listing["work_from_home"].items()) else ", ".join([work_from_home_option[0] for work_from_home_option in listing["work_from_home"].items() if work_from_home_option[1]])
         work_from_home_options_label = Label(info_frame, text = f'work from home options: {work_from_home_options}')
         work_from_home_options_label.grid(column = 1, row = 0)
 
