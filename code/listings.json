@@ -2,6 +2,15 @@
     "https://www.pracuj.pl/praca/software-net-developer-wroclaw-robotnicza-42a,oferta,1002494169": {
         "name": "Software .NET Developer",
         "employer": "Tap.Talent",
+        "pay": [
+            18000,
+            22000
+        ],
+        "pay_regularity": {
+            "yearly": false,
+            "monthly": true,
+            "hourly": false
+        },
         "location": "Robotnicza 42A, Stare Miasto, Wroc\u0142aw",
         "end_date": "N/A",
         "contract_type": {
@@ -25,15 +34,6 @@
             "temp": false
         },
         "remote_recruitment": true,
-        "pay": [
-            18000,
-            22000
-        ],
-        "pay_regularity": {
-            "yearly": false,
-            "monthly": true,
-            "hourly": false
-        },
         "required_skills": [
             "CSS",
             "jQuery",
