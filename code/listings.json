@@ -19,7 +19,11 @@
             "hybrid": false,
             "remote": false
         },
-        "full-time": false,
+        "working_hours": {
+            "full_time": false,
+            "part_time": false,
+            "temp": false
+        },
         "remote_recruitment": true,
         "pay": [
             18000,

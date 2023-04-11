@@ -67,10 +67,14 @@ def scrape(listing_url: str) -> dict:
     
     # change to etat: pelny/częściowy
     try:
-        full_time_text = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text
-        full_time = "pełny etat" in full_time_text.lower()
+        working_hours_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text
+        working_hours = {
+            "full_time": "pełny etat" in working_hours_options.lower(),
+            "part_time": "część etatu" in working_hours_options.lower(),
+            "temp": "tymczasowa" in working_hours_options.lower(),
+        }
     except AttributeError:
-        full_time = "N/A"
+        working_hours_options = "N/A"
     
     try:
         remote_recruitment_text = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(9) > div > div > div").text
@@ -127,7 +131,7 @@ def scrape(listing_url: str) -> dict:
         "contract_type": contract_type,
         "seniority": seniority,
         "work_from_home": work_from_home,
-        "full-time": full_time,
+        "working_hours": working_hours,
         "remote_recruitment": remote_recruitment,
         "pay": pay,
         "pay_regularity": pay_regularity,
@@ -209,8 +213,9 @@ def display_listings():
         work_from_home_options_label = Label(info_frame, text = f'work from home options: {work_from_home_options}')
         work_from_home_options_label.grid(column = 1, row = 0)
 
-        full_time_label = Label(info_frame, text = f'full time: {listing["full-time"]}')
-        full_time_label.grid(column = 1, row = 1)
+        working_hours_options = "N/A" if listing["working_hours"] == "N/A" or not any(working_hours_option[1] for working_hours_option in listing["working_hours"].items()) else ", ".join([working_hours_option[0] for working_hours_option in listing["working_hours"].items() if working_hours_option[1]])
+        working_hours_options_label = Label(info_frame, text = f'working hours options: {working_hours_options}')
+        working_hours_options_label.grid(column = 1, row = 1)
 
         for element in info_frame.children.values():
             element.grid(sticky = "W")
