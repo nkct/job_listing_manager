@@ -60,51 +60,71 @@ def scrape(listing_url: str) -> dict:
                 except AttributeError:
                     data["location"] = "N/A"
                 continue
-            try:
-                data["end_date"] = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(2) > div > div > div.offer-viewDZ0got").text.split(": ")[1]
-            except AttributeError:
-                data["end_date"] = "N/A"
-            try:
-                contract_types = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(3) > div > div > div").text
-                data["contract_type"] = {
-                    "coe": "umowa o pracę" in contract_types.lower(),
-                    "b2b": "b2b" in contract_types.lower(),
-                    "coc": "zlecenie" in contract_types.lower(),
-                }
-            except AttributeError:
-                data["contract_type"] = "N/A"
-            try:
-                seniorities = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(5) > div > div > div").text
-                data["seniority"] = {
-                    "senior": "senior" in seniorities.lower(),
-                    "mid": "mid" in seniorities.lower(),
-                    "junior": "junior" in seniorities.lower(),
-                }
-            except AttributeError:
-                data["seniority"] = "N/A"
-            try:
-                work_from_home_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(6) > div > div > div").text
-                data["work_from_home"] = {
-                    "on_site": "stacjonarna" in work_from_home_options.lower(),
-                    "hybrid": "hybrydowa" in work_from_home_options.lower(),
-                    "remote": "zdalna" in work_from_home_options.lower(),
-                }
-            except AttributeError:
-                data["work_from_home"] = "N/A"
-            try:
-                working_hours_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(4) > div > div > div").text
-                data["working_hours"] = {
-                    "full_time": "pełny etat" in working_hours_options.lower(),
-                    "part_time": "część etatu" in working_hours_options.lower(),
-                    "temp": "tymczasowa" in working_hours_options.lower(),
-                }
-            except AttributeError:
-                data["working_hours_options"] = "N/A"
-            try:
-                remote_recruitment_text = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul > li:nth-child(9) > div > div > div").text
-                data["remote_recruitment"] = "rekrutacja zdalna" in remote_recruitment_text.lower()
-            except AttributeError:
-                data["remote_recruitment"] = "N/A"
+
+            if "end_date" not in data:
+                try:
+                    data["end_date"] = element.contents[1].text.split(": ")[1]
+                except AttributeError:
+                    data["end_date"] = "N/A"
+                continue
+
+            if "contract_type" not in data:
+                try:
+                    contract_types = element.contents[0].text
+                    data["contract_type"] = {
+                        "coe": "umowa o pracę" in contract_types.lower(),
+                        "b2b": "b2b" in contract_types.lower(),
+                        "coc": "zlecenie" in contract_types.lower(),
+                    }
+                except AttributeError:
+                    data["contract_type"] = "N/A"
+                continue
+
+            if "working_hours" not in data:
+                try:
+                    working_hours_options = element.contents[0].text
+                    data["working_hours"] = {
+                        "full_time": "pełny etat" in working_hours_options.lower(),
+                        "part_time": "część etatu" in working_hours_options.lower(),
+                        "temp": "tymczasowa" in working_hours_options.lower(),
+                    }
+                except AttributeError:
+                    data["working_hours_options"] = "N/A"
+                continue
+
+            if "seniority" not in data:
+                try:
+                    print(element.contents[0].text)
+                    seniorities = element.contents[0].text
+                    data["seniority"] = {
+                        "senior": "senior" in seniorities.lower(),
+                        "mid": "mid" in seniorities.lower(),
+                        "junior": "junior" in seniorities.lower(),
+                    }
+                except AttributeError:
+                    data["seniority"] = "N/A"
+                continue
+
+            if "work_from_home" not in data:
+                try:
+                    work_from_home_options = element.contents[0].text
+                    data["work_from_home"] = {
+                        "on_site": "stacjonarna" in work_from_home_options.lower(),
+                        "hybrid": "hybrydowa" in work_from_home_options.lower(),
+                        "remote": "zdalna" in work_from_home_options.lower(),
+                    }
+                except AttributeError:
+                    data["work_from_home"] = "N/A"
+                continue
+
+            if "remote_recruitment" not in data:
+                try:
+                    remote_recruitment_text = element.contents[0].text
+                    data["remote_recruitment"] = "rekrutacja zdalna" in remote_recruitment_text.lower()
+                except AttributeError:
+                    data["remote_recruitment"] = "N/A"
+                continue
+
         except IndexError:
             continue
             

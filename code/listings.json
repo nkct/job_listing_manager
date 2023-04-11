@@ -12,28 +12,28 @@
             "hourly": false
         },
         "location": "Robotnicza 42A, Stare Miasto, Wroc\u0142aw",
-        "end_date": "N/A",
+        "end_date": "27 kwi 2023",
         "contract_type": {
             "coe": false,
-            "b2b": false,
+            "b2b": true,
             "coc": false
+        },
+        "working_hours": {
+            "full_time": true,
+            "part_time": false,
+            "temp": false
         },
         "seniority": {
             "senior": false,
-            "mid": false,
+            "mid": true,
             "junior": false
         },
         "work_from_home": {
             "on_site": false,
             "hybrid": false,
-            "remote": false
+            "remote": true
         },
-        "working_hours": {
-            "full_time": false,
-            "part_time": false,
-            "temp": false
-        },
-        "remote_recruitment": true,
+        "remote_recruitment": false,
         "required_skills": [
             "CSS",
             "jQuery",
