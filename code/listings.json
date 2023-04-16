@@ -45,5 +45,98 @@
             "dofinansowanie nauki j\u0119zyk\u00f3w",
             "dofinansowanie szkole\u0144 i kurs\u00f3w"
         ]
+    },
+    "https://www.pracuj.pl/praca/test-automation-engineer-warszawa,oferta,1002513216": {
+        "name": "Test Automation Engineer",
+        "employer": "E NET PRODUCTION",
+        "pay": [
+            14000,
+            18000
+        ],
+        "pay_regularity": {
+            "yearly": false,
+            "monthly": true,
+            "hourly": false
+        },
+        "location": "Warszawa",
+        "end_date": "05 maj 2023",
+        "contract_type": {
+            "coe": true,
+            "b2b": true,
+            "coc": false
+        },
+        "working_hours": {
+            "full_time": true,
+            "part_time": false,
+            "temp": false
+        },
+        "seniority": {
+            "senior": true,
+            "mid": true,
+            "junior": false
+        },
+        "work_from_home": {
+            "on_site": false,
+            "hybrid": false,
+            "remote": true
+        },
+        "remote_recruitment": false,
+        "required_skills": [
+            "JavaScript",
+            "TypeScript",
+            "Cypress",
+            "Git",
+            "DevTools",
+            "API REST"
+        ],
+        "nice_to_haves": [
+            "MySQL",
+            "MongoDB",
+            "PHP",
+            "Docker",
+            "GraphQL",
+            "Apollo GraphQL"
+        ],
+        "benefits": [
+            "dofinansowanie zaj\u0119\u0107 sportowych",
+            "prywatna opieka medyczna",
+            "dofinansowanie szkole\u0144 i kurs\u00f3w",
+            "ubezpieczenie na \u017cycie",
+            "brak dress code\u2019u",
+            "program rekomendacji pracownik\u00f3w",
+            "inicjatywy dobroczynne"
+        ]
+    },
+    "https://www.pracuj.pl/praca/inkasent-odczyty-licznikow-energii-elektrycznej-lodz,oferta,1002494674": {
+        "name": "Inkasent- odczyty licznik\u00f3w energii elektrycznej",
+        "employer": "ENERGO ZET sp. z o.o.",
+        "pay": "N/A",
+        "pay_regularity": "N/A",
+        "location": "\u0141\u00f3d\u017a",
+        "end_date": "27 kwi 2023",
+        "contract_type": {
+            "coe": false,
+            "b2b": true,
+            "coc": true
+        },
+        "working_hours": {
+            "full_time": true,
+            "part_time": true,
+            "temp": true
+        },
+        "seniority": {
+            "senior": false,
+            "mid": false,
+            "junior": false
+        },
+        "work_from_home": {
+            "on_site": false,
+            "hybrid": false,
+            "remote": false
+        },
+        "remote_recruitment": false,
+        "required_skills": "N/A",
+        "nice_to_haves": "N/A",
+        "benefits": "N/A"
     }
 }

@@ -21,23 +21,23 @@ def scrape(listing_url: str) -> dict:
     data = {}
 
     try:
-        data["name"] = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h1").text
+        data["name"] = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h1").text
     except AttributeError:
         data["name"] = "N/A"
     try:
-        data["employer"] = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").contents[0]
+        data["employer"] = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div.offer-view8N6um9 > div > div.offer-viewgQQ3bw > div > h2").contents[0]
     except AttributeError:
         data["employer"] = "N/A"
 
     try:
-        pay_info = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > strong").find_all("span", recursive = False)
+        pay_info = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > strong").find_all("span", recursive = False)
         pay = [filter(str.isdigit, pay_info[0].text), filter(str.isdigit, pay_info[1].text)]
         data["pay"] = [int("".join(pay)) for pay in pay]
     except AttributeError:
         data["pay"] = "N/A"
 
     try:
-        pay_regularity_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > span").text
+        pay_regularity_options = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div.offer-view8N6um9 > div > div.offer-viewiafL8R > div > span").text
         data["pay_regularity"] = {
             "yearly": "rocznie" in pay_regularity_options.lower(),
             "monthly": "mies" in pay_regularity_options.lower(),
@@ -45,8 +45,10 @@ def scrape(listing_url: str) -> dict:
         }
     except AttributeError:
         data["pay_regularity"] = "N/A"
-    
-    info_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div.offer-view8N6um9 > ul")
+        
+    info_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div.offer-view8N6um9 > ul")
+    if info_list is None:
+        info_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div.offer-view8N6um9 > ul.offer-vieweLojfZ")
     for li in info_list.contents:
         try:
             element = li.contents[0].contents[1]
@@ -94,7 +96,6 @@ def scrape(listing_url: str) -> dict:
 
             if "seniority" not in data:
                 try:
-                    print(element.contents[0].text)
                     seniorities = element.contents[0].text
                     data["seniority"] = {
                         "senior": "senior" in seniorities.lower(),
@@ -130,7 +131,7 @@ def scrape(listing_url: str) -> dict:
             
     try:
         required_skills = []
-        required_skills_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(2) > ul")
+        required_skills_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div:nth-child(3) > div:nth-child(2) > ul")
         for required_skill in required_skills_list.contents:
             required_skills.append(required_skill.contents[0].text)
         data["required_skills"] = required_skills
@@ -139,7 +140,7 @@ def scrape(listing_url: str) -> dict:
 
     try:
         nice_to_haves = []
-        nice_to_haves_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > div:nth-child(3) > div:nth-child(4) > ul")
+        nice_to_haves_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > div:nth-child(3) > div:nth-child(4) > ul")
         for nice_to_have in nice_to_haves_list.contents:
             nice_to_haves.append(nice_to_have.contents[0].text)
         data["nice_to_haves"] = nice_to_haves
@@ -148,7 +149,7 @@ def scrape(listing_url: str) -> dict:
 
     try:
         benefits = []
-        benefits_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ.offer-viewT4OXJG > section.offer-viewJsKTWk > ul")
+        benefits_list = soup.select_one("#kansas-offerview > div > div.offer-viewzxQhTZ > section.offer-viewJsKTWk > ul")
         for benefit in benefits_list.contents:
             benefits.append(benefit.contents[0].contents[1].text)
         data["benefits"] = benefits
